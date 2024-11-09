@@ -1,119 +1,58 @@
 # PRODIGY_CS_02
 Python-based Image Encryption and Decryption Tool that allows users to encrypt and decrypt images by manipulating pixel positions.
 
-from PIL import Image  # Importing the Image module from PIL (Pillow) for image processing
-import random  # Importing random module to shuffle pixels
-import os  # Importing os module to handle file paths and existence checks
+# Description
+This project implements a simple image encryption and decryption tool using pixel manipulation. It encrypts an image by randomly shuffling its pixels, and it can decrypt the image by restoring the original pixel order. This tool demonstrates basic cryptography principles applied to images, providing a hands-on approach to learning about encryption algorithms and image processing.
 
-def encrypt_image(image_path, output_path):
-    """
-    Encrypts the image by shuffling its pixels randomly.
-    """
-    # Check if the image file exists at the given path
-    if not os.path.exists(image_path):
-        print(f"Error: The file '{image_path}' does not exist.")
-        print(f"Trying to open: {image_path}")
-        return  # Exit if file does not exist
+# features
+1. Encrypts an image by randomly shuffling its pixels to create a scrambled version of the image.
+2. Restores the original image by reversing the shuffle using a list of shuffled pixel indices stored in a separate file.
+3. Utilizes pixel-level manipulation (shuffling of pixels) to create the encryption effect.
+4. Saves the encrypted image in a specified output path.
+5. Saves the shuffled pixel indices in a file (shuffled_indices.txt), which is used for decrypting the image later.
+6. Command-line interface allowing users to choose between encrypting or decrypting an image with simple inputs.
+7. Works with images in various formats such as .jpg, .jpeg, .png, and others supported by the Pillow library.
+8. The tool can be used on any system that supports Python and Pillow, including Windows, macOS, and Linux.
+9. Includes error handling for common issues like missing files or incorrect file paths.
+10. The project is open-source, allowing users to modify or contribute to the code.
 
-    try:
-        # Open the image and convert it to RGB format (3 channels for Red, Green, and Blue)
-        image = Image.open(image_path).convert("RGB")
-        # Extract all the pixel values from the image
-        pixels = list(image.getdata())
-        
-        # Get the width and height of the image
-        width, height = image.size
-        total_pixels = width * height  # Total number of pixels in the image
-        
-        # Create a list of indices (from 0 to total_pixels - 1)
-        indices = list(range(total_pixels))
-        random.shuffle(indices)  # Shuffle the indices randomly
-        
-        # Create a new list of pixels according to the shuffled indices
-        shuffled_pixels = [pixels[i] for i in indices]
-        
-        # Create a new image and set the shuffled pixels
-        encrypted_image = Image.new("RGB", image.size)
-        encrypted_image.putdata(shuffled_pixels)
-        # Save the encrypted image to the specified output path
-        encrypted_image.save(output_path)
-        print(f"Encrypted image saved to {output_path}")
-        
-        # Save the shuffled indices to a text file for later decryption
-        with open("shuffled_indices.txt", "w") as file:
-            file.write(" ".join(map(str, indices)))
-                
-    except Exception as e:
-        # Handle any exceptions that may occur during the process
-        print(f"An unexpected error occurred: {e}")
+# Requirements
+To run this tool, you need to have the following installed:
 
-def decrypt_image(image_path, output_path):
-    """
-    Decrypts the image by restoring the original pixel positions.
-    """
-    # Check if the encrypted image file exists
-    if not os.path.exists(image_path):
-        print(f"Error: The file '{image_path}' does not exist.")
-        return  # Exit if file does not exist
+Python 3.x
+Pillow library (for image processing) - install using the command " pip install pillow "
 
-    # Check if the shuffled indices file exists
-    if not os.path.exists("shuffled_indices.txt"):
-        print("Error: The shuffled indices file 'shuffled_indices.txt' is missing.")
-        return  # Exit if the indices file does not exist
+# How It Works
+When you run the program, you will be prompted to choose between encrypting or decrypting an image. The steps depend on your choice:
 
-    try:
-        # Read the shuffled indices from the file
-        with open("shuffled_indices.txt", "r") as file:
-            indices = list(map(int, file.read().strip().split()))
-        
-        # Open the encrypted image and convert it to RGB
-        image = Image.open(image_path).convert("RGB")
-        # Extract all the pixel values from the image
-        pixels = list(image.getdata())
-        
-        # Create a list to hold the decrypted pixels
-        decrypted_pixels = [None] * len(pixels)
-        
-        # Reverse the shuffle using the saved indices to restore the original order
-        for i, index in enumerate(indices):
-            decrypted_pixels[index] = pixels[i]
-        
-        # Create a new image and set the decrypted pixels
-        decrypted_image = Image.new("RGB", image.size)
-        decrypted_image.putdata(decrypted_pixels)
-        # Save the decrypted image to the specified output path
-        decrypted_image.save(output_path)
-        print(f"Decrypted image saved to {output_path}")
-        
-    except Exception as e:
-        # Handle any exceptions that may occur during the process
-        print(f"An unexpected error occurred: {e}")
+1. Encrypting an Image:
+    The program will ask you for the path to the image you want to encrypt and the desired output path for the encrypted image.
 
-def main():
-    """
-    Main function to interact with the user for choosing encryption or decryption.
-    """
-    print("Image Encryption and Decryption Tool")
-    print("1. Encrypt an Image")
-    print("2. Decrypt an Image")
-    # Ask the user to choose either encryption or decryption
-    choice = input("Enter your choice (1 or 2): ")
+    It will randomly shuffle the pixels of the image and save the result to the specified output path.
 
-    if choice not in ["1", "2"]:
-        print("Invalid choice. Please select 1 or 2.")
-        return  # Exit if the user input is not valid
-    
-    # Get the file paths for the image and the output
-    image_path = input("Enter the path of the image: ")
-    output_path = input("Enter the output path for the processed image: ")
+    The shuffled pixel indices are saved to a file (shuffled_indices.txt) to enable decryption later.
 
-    if choice == "1":
-        # If the user chose encryption, call the encrypt function
-        encrypt_image(image_path, output_path)
-        
-    elif choice == "2":
-        # If the user chose decryption, call the decrypt function
-        decrypt_image(image_path, output_path)
+2. Decrypting an Image:
+    The program will ask you for the path to the encrypted image and the output path for the decrypted image.
+    It will read the shuffled pixel indices from the shuffled_indices.txt file.
+    The pixels are rearranged based on these indices to restore the image to its original state.
+    The decrypted image is saved to the specified output path.
 
-if __name__ == "__main__":
-    main()  # Run the main function to start the program
+# Error Handling:
+
+If the file path to the image does not exist, or if the shuffled_indices.txt file is missing during decryption, the program will print an error message.
+
+# Example
+Running the Program:
+
+1. Encrypting an Image:
+    Choose option 1 (Encrypt an Image).
+    Enter the path to the image you want to encrypt (e.g., path/to/image.jpg).
+    Enter the output path for the encrypted image (e.g., path/to/encrypted_image.jpg).
+
+2. Decrypting an Image:
+    Choose option 2 (Decrypt an Image).
+    Enter the path to the encrypted image (e.g., path/to/encrypted_image.jpg).
+    Enter the output path for the decrypted image (e.g., path/to/decrypted_image.jpg).
+
+
