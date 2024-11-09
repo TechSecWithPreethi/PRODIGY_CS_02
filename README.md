@@ -23,7 +23,9 @@ Python 3.x
 Pillow library (for image processing) - install using the command " pip install pillow "
 
 # How It Works
-When you run the program, you will be prompted to choose between encrypting or decrypting an image. The steps depend on your choice:
+When you run the program, you will be prompted to choose between encrypting or decrypting an image. 
+
+The steps depend on your choice:
 
 1. Encrypting an Image:
     The program will ask you for the path to the image you want to encrypt and the desired output path for the encrypted image.
