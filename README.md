@@ -4,7 +4,7 @@ Python-based Image Encryption and Decryption Tool that allows users to encrypt a
 # Description
 This project implements a simple image encryption and decryption tool using pixel manipulation. It encrypts an image by randomly shuffling its pixels, and it can decrypt the image by restoring the original pixel order. This tool demonstrates basic cryptography principles applied to images, providing a hands-on approach to learning about encryption algorithms and image processing.
 
-# features
+# Features
 1. Encrypts an image by randomly shuffling its pixels to create a scrambled version of the image.
 2. Restores the original image by reversing the shuffle using a list of shuffled pixel indices stored in a separate file.
 3. Utilizes pixel-level manipulation (shuffling of pixels) to create the encryption effect.
